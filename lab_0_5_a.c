@@ -5,7 +5,7 @@
 
 char *getStr();
 char *removeSpaces(char *le_string);
-void removeSpacesForBuf(char *str1, char * str2);
+void removeSpacesForBuf(char *str1);
 void charSelection(char *stroka, char *symv1, char *symv2);
 char *selecting(char *str, char symv1, char symv2);
 void addBlank(char *str);
@@ -75,11 +75,13 @@ char *removeSpaces(char *le_string)
   }
   buf[secondary_index] = '\0';
   char *tmp = (char *)malloc(strlen(buf) + 1);
-  strcat(tmp,buf);
+  strcpy(tmp,buf);
+  for(int i = 0; i < strlen(buf); i++)
+    buf[i] = 0;
   return tmp;
 }
 
-void removeSpacesForBuf(char *str1, char * str2)
+void removeSpacesForBuf(char *str1)
 {
     int secondary_index = 0;
     for(int i = 0; i < strlen(str1); i++)
@@ -90,11 +92,11 @@ void removeSpacesForBuf(char *str1, char * str2)
         }
         else
         {
-            str2[secondary_index] = str1[i];
+            str1[secondary_index] = str1[i];
             ++secondary_index;
         }
     }
-    str2[secondary_index] = '\0';
+    str1[secondary_index] = '\0';
 }
 
 void charSelection(char *stroka, char *symv1, char *symv2)
@@ -103,46 +105,46 @@ void charSelection(char *stroka, char *symv1, char *symv2)
     *symv2 = stroka[strlen(stroka) - 1];
 }
 
-void addBlank(char *str)
-{
-    //str = (char *)realloc(str, strlen(str) + 1);
-    strcat(str, " ");
-}
-
 char *selecting(char *str, char symv1, char symv2)
 {
     char buff[1024] = {0};
     int temp_index = 0;
-    int flag = 0;
+    int flag = 0, len = 0;
+    char *temp = (char *)malloc(1);
+    *temp = '\0';
     for(int i = 0; i < strlen(str); i++)
     {
        if(str[i] == symv1)
        {
         flag = 1;
-        //for(int j = 0; j < strlen(buff); j++)
-          //  buff[j] = ' ';
-        //temp_index = 0;
+        for(int j = 0; j < strlen(buff); j++)
+        {
+            buff[j] = ' ';
+        }
+        len = 0;
+        temp_index = 0;
        }
        else if(str[i + 1] == symv2)
        {
          if(!flag)
              continue;
-         //ubiraetProbeli2(buff);
-         //strcat(group_str, buff);
-         addBlank(buff);
-         temp_index++;
+         printf("Buff: %s\n ", buff);
+         removeSpacesForBuf(buff);
+         strcat(buff, " ");
+         printf("Buff2: %s\n ", buff);
+         temp = (char *)realloc(temp,strlen(buff) + 1);
+         strcat(temp, buff);
+         printf("Temp: %s\n ", temp);
          flag = 0;
        }
        if(flag)
        {
          buff[temp_index] = str[i + 1];
+         //len += strlen(buff);
          temp_index++;
        }
 
     }
-    buff[temp_index] = '\0';
-    char *temp = (char *)malloc(strlen(buff) + 1);
-    strcat(temp,buff);
     return temp;
 }
 
