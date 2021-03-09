@@ -76,8 +76,8 @@ char *removeSpaces(char *le_string)
   buf[secondary_index] = '\0';
   char *tmp = (char *)malloc(strlen(buf) + 1);
   strcpy(tmp,buf);
-  for(int i = 0; i < strlen(buf); i++)
-    buf[i] = 0;
+  //for(int i = 0; i < strlen(buf); i++)
+    //buf[i] = 0;
   return tmp;
 }
 
@@ -132,7 +132,7 @@ char *selecting(char *str, char symv1, char symv2)
          removeSpacesForBuf(buff);
          strcat(buff, " ");
          printf("Buff2: %s\n ", buff);
-         temp = (char *)realloc(temp,strlen(buff) + 1);
+         temp = (char *)realloc(temp,strlen(temp)+strlen(buff) + 1);
          strcat(temp, buff);
          printf("Temp: %s\n ", temp);
          flag = 0;
