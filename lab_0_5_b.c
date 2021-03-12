@@ -16,6 +16,7 @@ void print_list(list *a);
 void free_list(list *orig);
 list* fill(char *str);
 list* wordRev(list *list);
+list* gapDel(list *lst);
 //void listShow(list *list);
 //void reverseList(list *list,list **filtered_list);
 
@@ -34,8 +35,9 @@ int main()
       else
       {
         head = fill(str);
+        head = gapDel(head);
         head = wordRev(head);
-        //print_list(head);
+        print_list(head);
       }
       scanf("%*c");
       free_list(head);
@@ -128,19 +130,8 @@ list* wordRev(list *lst)
   list *temp3 = NULL;
   list *temp2 = NULL;
   list *temp1 = NULL;
-  int k = 1;
+  int k = 0,m = 0;
   list *o = NULL;
-  while(lst != NULL && k)
-  {
-    if(lst->c == ' ')
-    {
-      lst = del_root(lst);
-    }
-    else
-    {
-      k--;
-    }
-  }
   o = lst;
   if(!lst)
   {
@@ -152,12 +143,10 @@ list* wordRev(list *lst)
     {
       if(temp3)
       {
-        printf("%c - temp1, %c - temp3, %c - temp2 ", temp1->c, temp3->c, temp2->c);
+        //printf("%c - temp1, %c - temp3, %c - temp2 ", temp1->c, temp3->c, temp2->c);
         temp2 = lst;
         lst = temp3;
         lst->next = temp1;
-        printf("\nVtoroi i dalee probel - ");
-        print_list(lst);
         lst = temp2;
       }
       k = 0;
@@ -168,19 +157,20 @@ list* wordRev(list *lst)
         lst = lst->next;
       if(lst->next)
           lst = lst->next;
-      while(lst->c == ' ')
+      while(lst->c == ' ' && m)//Нет проверки на нуль и хуeta какая to
       {
         lst = del(lst,o);
       }
-      printf("\nVivod, %c - Bykva ", lst->c);
-      print_list(lst);
+      //printf("\nVivod, %c - Bykva ", lst->c);
+      //print_list(lst);
     }
     else
     {
       if(!k)
       {
-        printf("\nPervoe vxozdenie simvola posle probela - ");
-        print_list(lst);
+        m = 1;
+        //printf("\nPervoe vxozdenie simvola posle probela - ");
+        //print_list(lst);
         k = 1;
         temp1 = lst;
         temp = lst;
@@ -188,8 +178,8 @@ list* wordRev(list *lst)
       }
       else
       {
-        printf("\nOstalnoe slovo - ");
-        print_list(lst);
+        //printf("\nOstalnoe slovo - ");
+        //print_list(lst);
         temp2 = lst->next;
         lst->next = temp1;
         temp1 = lst;
@@ -202,7 +192,46 @@ list* wordRev(list *lst)
     }
   }
   lst = o;
-  print_list(lst);
+  //printf("\nfinal ");
+  //print_list(lst);
+  return lst;
+}
+
+list * gapDel(list * lst){
+  list * tmp;
+  int k = 1;
+  while(lst && k){
+    if(lst->c == ' ' || lst->c == '\t'){
+      lst = del_root(lst);
+
+    }
+    else{
+      k=0;
+    }
+  }
+
+  tmp = lst;
+
+  while(lst->next){
+    if(lst->c == ' ' || lst->c == '\t'){
+      if(!k){
+        k = 1;
+        lst->c = ' ';
+        lst = lst->next;
+      }
+      else{
+      k = 0;
+      lst = del(lst, tmp);
+      }
+    }
+
+    else{
+      k = 0;
+      lst = lst->next;
+    }
+  }
+  //lst = add(lst, ' ');
+  lst = tmp;
   return lst;
 }
 /*void listShow(Node *list)
